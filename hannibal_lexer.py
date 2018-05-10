@@ -8,12 +8,13 @@ tokens = [  #PALABRAS   RESERVADAS
             'VAR', 'CONST', 'FUNCTION', 'ECHO', 'EXTENDS', 'PRINT', 'RETURN',
             'FOR', 'FOREACH', 'ENDFOREACH', 'ENDFOR', 'REQUIRE', 'EHTML',
             #OPERADORES
-            'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'ASSIGN', 'SEMICOLON', 'LPAREN',
-            'RPAREN', 'COMMA', 'MODULE', 'LT', 'LE', 'EQUAL', 'GE', 'GT', 'NEQUAL',
-            'AND', 'OR', 'NOT', 'ANDBT', 'ORBT','POSITIVEINCREASE', 'INCREASE',
-            'DECREASE', 'NEGATIVEINCREASE', 'MULTIPLIINCREASE', 'DIVIDEINCREASE',
+            'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'ASSIGN', 'SEMICOLON',
+            'LPAREN','RPAREN', 'LBRACKET', 'RBRACKET', 'COMMA', 'MODULE', 'LT',
+            'LE', 'EQUAL', 'GE', 'GT', 'NEQUAL', 'AND', 'OR', 'NOT', 'ANDBT',
+            'ORBT','POSITIVEINCREASE', 'INCREASE','DECREASE',
+            'NEGATIVEINCREASE', 'MULTIPLIINCREASE', 'DIVIDEINCREASE',
             #TOKENS COMPUESTOS
-            'ID',
+            'ID', 'FUNCID',
             #TIPOS DE DATOS
             'STRING', 'NUMBER'
             ]
@@ -45,6 +46,8 @@ t_ASSIGN    = r'='
 t_SEMICOLON      = r';'
 t_LPAREN    = r'\('
 t_RPAREN    = r'\)'
+t_LBRACKET = r'\{'
+t_RBRACKET = r'\}'
 t_COMMA     = r','
 t_LT        = r'<'
 t_LE        = r'<='
@@ -72,8 +75,8 @@ t_DECREASE         = r'\-\-'
 # ----------------------------------------------------------------------
 #                              COMPUESTOS
 # ----------------------------------------------------------------------
-t_ID       = r'\$(\_([0-9]|[a-z A-Z])|[a-z A-Z])(([0-9])+|([a-z A-Z]))*'
-
+t_ID = r'\$(\_([0-9]|[a-z A-Z])|[a-z A-Z])(([0-9])+|([a-z A-Z]))*'
+t_FUNCID =  r'(\_([0-9]|[a-z A-Z])|[a-z A-Z])(([0-9])+|([a-z A-Z]))*'
 # ----------------------------------------------------------------------
 #                              TIPOS DE DATOS
 # ----------------------------------------------------------------------

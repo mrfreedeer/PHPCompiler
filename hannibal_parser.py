@@ -24,27 +24,49 @@ def p_var_declaration(p):
                        | expression'''
     pass
 def p_fun_declaration(p):
-    'fun_declaration : FUNCTION LPAREN RPAREN'
+    'fun_declaration : FUNCTION FUNCID LPAREN params RPAREN comp_statement'
     pass
+def p_comp_statement(p): #modify
+    'comp_statement : LBRACKET expression RBRACKET'
+    pass
+def p_params_1(p):
+    'params : params COMMA param'
+    pass
+def p_params_2(p):
+    'params : param'
+    pass
+def p_param(p):
+    '''param : ID
+             | NUMBER
+             | STRING
+            '''
+    pass
+
 def p_expression(p):
     'expression : additive_expression'
+    pass
 def p_additive_expression(p):
     '''additive_expression : additive_expression opsum term
                          | term'''
+    pass
 def p_opsum(p):
     '''opsum : PLUS
              | MINUS'''
+    pass
 def p_opmult(p):
     '''opmult : MULTIPLY
              | DIVIDE'''
+    pass
 def p_term(p):
     '''term : term opmult factor
           | factor '''
+    pass
 def p_factor(p):
     '''factor : LPAREN expression RPAREN
               | NUMBER
               | ID
     '''
+    pass
 def p_error(p):
 	if VERBOSE:
 		if p is not None:

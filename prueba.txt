@@ -1,16 +1,16 @@
-
+$x = 5 /* + 15 */ + 5;
 // This is a single-line comment
 
 # This is also  a single-line comment
 
 /*
 This is a multiple-lines comment block
-that spans over multiples /*lagartazo*/
+that spans over multiples
 lines
 */
 
 // You can also use comments to leave out parts of a code line
-$x = 5 /* + 15 */ + 5;
+
 echo $x;
 echo 'Hello World!';
 ECHO "Hello World!<br>";

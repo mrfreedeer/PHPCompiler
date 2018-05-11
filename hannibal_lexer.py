@@ -3,10 +3,13 @@ import ply.lex as lex
 
 inputtype = 1
 #Lista de tokens
-tokens = [  #PALABRAS   RESERVADAS
+'''
+ #PALABRAS   RESERVADAS
             'IF', 'ENDIF','ELSE', 'ELSEIF', 'WHILE',
             'VAR', 'CONST', 'FUNCTION', 'ECHO', 'EXTENDS', 'PRINT', 'RETURN',
             'FOR', 'FOREACH', 'ENDFOREACH', 'ENDFOR', 'REQUIRE', 'EHTML',
+'''
+tokens = [
             #OPERADORES
             'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'ASSIGN', 'SEMICOLON',
             'LPAREN','RPAREN', 'LBRACKET', 'RBRACKET', 'COMMA', 'MODULE', 'LT',
@@ -20,24 +23,26 @@ tokens = [  #PALABRAS   RESERVADAS
             ]
 t_ignore = ' \t\r | \n'
 
-
-t_IF        = r'(?i)if'
-t_ENDIF     = r'(?i)endif'
-t_ELSE      = r'(?i)else'
-t_ELSEIF    = r'(?i)elseif'
-t_WHILE     = r'(?i)while'
-t_VAR       = r'(?i)var'
-t_CONST     = r'(?i)const'
-t_FUNCTION  = r'(?i)function'
-t_ECHO      = r'(?i)echo'
-t_EXTENDS   = r'(?i)extends'
-t_PRINT     = r'(?i)print'
-t_RETURN    = r'(?i)return'
-t_FOR       = r'(?i)for'
-t_FOREACH   = r'(?i)foreach'
-t_ENDFOR    = r'(?i)endfor'
-t_ENDFOREACH = r'(?i)endforeach'
-t_REQUIRE   = r'(?i)require'
+reserved = {
+   'if' : 'IF',
+   'endif' : 'ENDIF',
+   'else' : 'ELSE',
+   'elseif' : 'ELSEIF',
+   'while' : 'WHILE',
+   'var' : 'VAR',
+   'const' : 'CONST',
+   'function' : 'FUNCTION',
+   'echo'   : 'ECHO',
+   'extends' : 'EXTENDS',
+   'print' : 'PRINT',
+   'return' : 'RETURN',
+   'for' : 'FOR',
+   'foreach' : 'FOREACH',
+   'endfor' : 'ENDFOR',
+   'endforeach' : 'ENDFOREACH',
+   'require' : 'REQUIRE'
+   }
+tokens += list(reserved.values())
 t_PLUS      = r'\+'
 t_MINUS     = r'-'
 t_MULTIPLY     = r'\*'
@@ -75,8 +80,24 @@ t_DECREASE         = r'\-\-'
 # ----------------------------------------------------------------------
 #                              COMPUESTOS
 # ----------------------------------------------------------------------
-t_ID = r'\$(\_([0-9]|[a-z A-Z])|[a-z A-Z])(([0-9])+|([a-z A-Z]))*'
-t_FUNCID =  r'(\_([0-9]|[a-z A-Z])|[a-z A-Z])(([0-9])+|([a-z A-Z]))*'
+
+def t_ID(t):
+    r'\$(\_([0-9]|[a-z A-Z])|[a-z A-Z])(([0-9])+|([a-z A-Z]))*'
+    s = str(t.value.lower())
+    if s[-1:] == ' ':
+        s = s[:-1]
+    if t.value in reserved:
+        t.type = reserved[t.value]
+    return t
+def t_FUNCID(t):
+    r'(\_([0-9]|[a-z A-Z])|[a-z A-Z])(([0-9])+|([a-z A-Z]))*'
+
+    s = str(t.value.lower())
+    if s[-1:] == ' ':
+        s = s[:-1]
+    if s in reserved:
+        t.type = reserved[s]
+    return t
 # ----------------------------------------------------------------------
 #                              TIPOS DE DATOS
 # ----------------------------------------------------------------------
@@ -92,7 +113,7 @@ def t_error(t):
 	t.lexer.skip(1)
 	return t
 def t_comments(t):
-    r'/\*(.|\n)*?(/\*(.|\n)*?\*/)(.|\n)*\*/|(//.*|\#.*)'
+    r'/\*(.|\n)*?\*/|(//.*|\#.*)'
     t.lexer.lineno += t.value.count('\n')
 '''
 RECURSIVE COMMENT

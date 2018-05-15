@@ -11,24 +11,45 @@ def p_declaration_list(p):
     'declaration_list : declaration'
     pass
 def p_declaration(p):
-    '''declaration : var_declaration
-                   | fun_declaration
-                   | echo'''
+    '''declaration : declaration var_declaration
+                   | declaration fun_declaration
+                   | declaration echo
+                   | declaration conditional
+                   | declaration iterative
+                   | declaration incremental_expression
+                   | empty'''
+    pass
+def p_declaration2(p):
+    '''declaration2 : declaration2 var_declaration
+                    | declaration2 echo
+                    | declaration2 conditional
+                    | declaration2 iterative
+                    | declaration2 incremental_expression
+                    | empty'''
     pass
 def p_echo(p):
-    '''echo : ECHO STRING
-            | ECHO ID'''
+    '''echo : ECHO STRING SEMICOLON
+            | ECHO ID SEMICOLON'''
     pass
 def p_var_declaration(p):
     '''var_declaration : ID ASSIGN NUMBER SEMICOLON
                        | ID ASSIGN STRING SEMICOLON
                        | ID ASSIGN expression SEMICOLON'''
     pass
-def p_fun_declaration(p):
-    'fun_declaration : FUNCTION FUNCID LPAREN params RPAREN comp_statement'
+def p_var_declaration2(p):
+    '''var_declaration2 : ID ASSIGN NUMBER
+                        | ID ASSIGN expression'''
     pass
-def p_comp_statement(p): #modify
-    'comp_statement : LBRACKET expression RBRACKET SEMICOLON'
+def p_fun_declaration(p):
+    'fun_declaration : FUNCTION FUNCID LPAREN params RPAREN LBRACKET declaration2 RBRACKET'
+    pass
+def p_fun_declaration_2(p):
+    'fun_declaration : FUNCTION FUNCID LPAREN params RPAREN LBRACKET declaration2 return_statement RBRACKET'
+    pass
+def p_return_statement(p):
+    '''return_statement : RETURN expression SEMICOLON
+                      | RETURN expression2 SEMICOLON
+                      | RETURN incremental_expression'''
     pass
 def p_params_1(p):
     'params : params COMMA param'
@@ -43,9 +64,44 @@ def p_param(p):
              | empty
             '''
     pass
-
+def p_conditional(p):
+    '''conditional : IF LPAREN expression2 RPAREN LBRACKET declaration2 RBRACKET SEMICOLON
+                   | IF LPAREN expression2 RPAREN LBRACKET declaration2 RBRACKET ENDIF SEMICOLON
+                   |  IF LPAREN expression2 RPAREN LBRACKET declaration2 RBRACKET ELSE LBRACKET declaration2 RBRACKET '''
+def p_iterative(p):
+    '''iterative : WHILE LPAREN expression2 RPAREN LBRACKET declaration2 RBRACKET
+                 | FOR LPAREN var_declaration2 SEMICOLON simple_expression SEMICOLON iterative_expression RPAREN LBRACKET declaration2 RBRACKET'''
+    pass
+def p_iterative_expression(p):
+    '''iterative_expression : ID INCREASE
+                            | ID DECREASE
+                            | ID POSITIVEINCREASE additive_expression
+                            | ID NEGATIVEINCREASE additive_expression
+                            | ID MULTIPLIINCREASE additive_expression
+                            | ID DIVIDEINCREASE additive_expression'''
+    pass
+def p_incremental_expression(p):
+    '''incremental_expression : iterative_expression SEMICOLON'''
+    pass
 def p_expression(p):
-    'expression : additive_expression'
+    '''expression : additive_expression
+                | simple_expression'''
+    pass
+def p_expression2(p):
+    '''expression2 : simple_expression
+                 | ID '''
+    pass
+
+def p_simple_expression(p):
+    'simple_expression : additive_expression compop additive_expression'
+def p_compop(p):
+    '''compop : LT
+              | LE
+              | GT
+              | GE
+              | EQUAL
+              | NEQUAL
+              | IDENTICAL'''
     pass
 def p_additive_expression(p):
     '''additive_expression : additive_expression opsum term
@@ -81,14 +137,14 @@ def p_empty(p):
     'empty :'
 lexer = lex.lex()
 parser = yacc.yacc()
-input = 1
+input = 0
 
 if __name__ == '__main__':
     if not input:
         if (len(sys.argv) > 1):
             fin = sys.argv[1]
         else:
-            fin = 'prueba.txt'
+            fin = 'prueba2.txt'
         f = open(fin, 'r')
         data = f.read()
         s = lex.input(data)

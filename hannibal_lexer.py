@@ -14,7 +14,7 @@ tokens = [
             'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'ASSIGN', 'SEMICOLON',
             'LPAREN','RPAREN', 'LBRACKET', 'RBRACKET', 'COMMA', 'MODULE', 'LT',
             'LE', 'EQUAL', 'GE', 'GT', 'NEQUAL', 'AND', 'OR', 'NOT', 'ANDBT',
-            'ORBT','POSITIVEINCREASE', 'INCREASE','DECREASE',
+            'ORBT','POSITIVEINCREASE', 'INCREASE','DECREASE', 'IDENTICAL',
             'NEGATIVEINCREASE', 'MULTIPLIINCREASE', 'DIVIDEINCREASE',
             #TOKENS COMPUESTOS
             'ID', 'FUNCID',
@@ -61,6 +61,7 @@ t_GE        = r'>='
 t_AND      = r'\&\&'
 t_OR       = r'\|\|'
 t_EQUAL     = r'=='
+t_IDENTICAL = r'==='
 t_NEQUAL    = r'!='
 
 # ----------------------------------------------------------------------
@@ -86,17 +87,15 @@ def t_ID(t):
     s = str(t.value.lower())
     if s[-1:] == ' ':
         s = s[:-1]
-    if t.value in reserved:
+    if s in reserved:
         t.type = reserved[t.value]
     return t
 def t_FUNCID(t):
     r'(\_([0-9]|[a-z A-Z])|[a-z A-Z])(([0-9])+|([a-z A-Z]))*'
-
     s = str(t.value.lower())
     if s[-1:] == ' ':
         s = s[:-1]
-    if s in reserved:
-        t.type = reserved[s]
+    t.type = reserved.get(t.value,'FUNCID')
     return t
 # ----------------------------------------------------------------------
 #                              TIPOS DE DATOS

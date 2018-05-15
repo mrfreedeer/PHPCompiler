@@ -148,7 +148,7 @@ if __name__ == '__main__':
         f = open(fin, 'r')
         data = f.read()
         s = lex.input(data)
-        print data
+        print (data)
         parser.parse(data, debug = True, tracking=True)
     else:
         while True:

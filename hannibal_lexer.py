@@ -83,19 +83,19 @@ t_DECREASE         = r'\-\-'
 # ----------------------------------------------------------------------
 
 def t_ID(t):
-    r'\$(\_([0-9]|[a-z A-Z])|[a-z A-Z])(([0-9])+|([a-z A-Z]))*'
+    r'\$(\_w+ | w+)?(_\d\w)*'
     s = str(t.value.lower())
     if s[-1:] == ' ':
         s = s[:-1]
     if s in reserved:
-        t.type = reserved[t.value]
+        t.type = reserved[s]
     return t
 def t_FUNCID(t):
-    r'(\_([0-9]|[a-z A-Z])|[a-z A-Z])(([0-9])+|([a-z A-Z]))*'
+    r'\w+(_\d\w)*'
     s = str(t.value.lower())
     if s[-1:] == ' ':
         s = s[:-1]
-    t.type = reserved.get(t.value,'FUNCID')
+    t.type = reserved.get(s,'FUNCID')
     return t
 # ----------------------------------------------------------------------
 #                              TIPOS DE DATOS

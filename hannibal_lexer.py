@@ -1,7 +1,7 @@
 import sys
 import ply.lex as lex
 
-inputtype = 1
+inputtype = 0
 #Lista de tokens
 '''
  #PALABRAS   RESERVADAS
@@ -21,7 +21,7 @@ tokens = [
             #TIPOS DE DATOS
             'STRING', 'NUMBER'
             ]
-t_ignore = ' \t\r | \n'
+t_ignore = '\t\r | \n| \ '
 
 reserved = {
    'if' : 'IF',
@@ -42,13 +42,15 @@ reserved = {
    'endforeach' : 'ENDFOREACH',
    'require' : 'REQUIRE'
    }
+
+
 tokens += list(reserved.values())
 t_PLUS      = r'\+'
 t_MINUS     = r'-'
 t_MULTIPLY     = r'\*'
 t_DIVIDE    = r'/'
 t_ASSIGN    = r'='
-t_SEMICOLON      = r';'
+t_SEMICOLON = r';'
 t_LPAREN    = r'\('
 t_RPAREN    = r'\)'
 t_LBRACKET = r'\{'
@@ -82,13 +84,20 @@ t_DECREASE         = r'\-\-'
 #                              COMPUESTOS
 # ----------------------------------------------------------------------
 
+# ----------------------------------------------------------------------
+#                              TIPOS DE DATOS
+# ----------------------------------------------------------------------
+t_STRING           = r'(\"(.)*\"|\'(.)*\')'
+
+def t_NUMBER(t):
+    r'-?[0-9]+(\.[0-9]+)?((E|e)-?[0-9]*(\.[0-9])?)?'
+    return t
 def t_ID(t):
-    r'\$(\_w+ | w+)?(_\d\w)*'
+    r'\$((\_?[a-z A-Z]| \_[0-9])+)(_\d\w)*'
     s = str(t.value.lower())
     if s[-1:] == ' ':
         s = s[:-1]
-    if s in reserved:
-        t.type = reserved[s]
+    t.type = reserved.get(s,'ID')
     return t
 def t_FUNCID(t):
     r'\w+(_\d\w)*'
@@ -97,13 +106,6 @@ def t_FUNCID(t):
         s = s[:-1]
     t.type = reserved.get(s,'FUNCID')
     return t
-# ----------------------------------------------------------------------
-#                              TIPOS DE DATOS
-# ----------------------------------------------------------------------
-t_STRING           = r'(\"(.)*\"|\'(.)*\')'
-t_NUMBER = r'-?[0-9]+(\.[0-9]+)?((E|e)-?[0-9]*(\.[0-9])?)?'
-
-
 
 
 #Definicion de error que se va a mostrar cuando un caracter ingresado no es valido
@@ -114,6 +116,8 @@ def t_error(t):
 def t_comments(t):
     r'/\*(.|\n)*?\*/|(//.*|\#.*)'
     t.lexer.lineno += t.value.count('\n')
+
+
 '''
 RECURSIVE COMMENT
     r'/\*(.|\n)*?(/\*(.|\n)*?\*/)(.|\n)*\*/|(//.*|\#.*)'
@@ -156,7 +160,6 @@ if __name__ == '__main__':
         		break
         	if not s:
         		continue
-
 
         # Almacena la operacion en s
         	lex.input(s)

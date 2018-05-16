@@ -92,6 +92,7 @@ t_STRING           = r'(\"(.)*\"|\'(.)*\')'
 def t_NUMBER(t):
     r'-?[0-9]+(\.[0-9]+)?((E|e)-?[0-9]*(\.[0-9])?)?'
     return t
+
 def t_ID(t):
     r'\$((\_?[a-z A-Z]| \_[0-9])+)(_\d\w)*'
     s = str(t.value.lower())
@@ -99,6 +100,7 @@ def t_ID(t):
         s = s[:-1]
     t.type = reserved.get(s,'ID')
     return t
+    
 def t_FUNCID(t):
     r'\w+(_\d\w)*'
     s = str(t.value.lower())

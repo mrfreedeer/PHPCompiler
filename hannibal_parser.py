@@ -25,6 +25,7 @@ def p_declaration2(p):
                     | declaration2 conditional
                     | declaration2 iterative
                     | declaration2 incremental_expression
+                    | declaration2 return_statement
                     | empty'''
     pass
 def p_echo(p):
@@ -43,9 +44,7 @@ def p_var_declaration2(p):
 def p_fun_declaration(p):
     'fun_declaration : FUNCTION FUNCID LPAREN params RPAREN LBRACKET declaration2 RBRACKET'
     pass
-def p_fun_declaration_2(p):
-    'fun_declaration : FUNCTION FUNCID LPAREN params RPAREN LBRACKET declaration2 return_statement RBRACKET'
-    pass
+
 def p_return_statement(p):
     '''return_statement : RETURN expression SEMICOLON
                       | RETURN expression2 SEMICOLON
